@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { SessionProvider } from "../components/SessionProvider";
+import { AuthControls } from "../components/AuthControls";
 
 export const metadata: Metadata = {
   title: "Podcas堂",
@@ -11,15 +13,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ja">
       <body>
-        <header className="site-header">
-          <div className="container">
-            <p className="site-title">
-              <Link href="/">Podcas堂</Link>
-            </p>
-            <span className="field-hint">Podcastを検索して番組を見つけよう</span>
-          </div>
-        </header>
-        <main className="container">{children}</main>
+        <SessionProvider>
+          <header className="site-header">
+            <div className="container">
+              <p className="site-title">
+                <Link href="/">Podcas堂</Link>
+              </p>
+              <span className="header-spacer" />
+              <AuthControls />
+            </div>
+          </header>
+          <main className="container">{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );

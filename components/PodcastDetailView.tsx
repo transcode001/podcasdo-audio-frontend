@@ -1,6 +1,7 @@
 import type { PodcastDetail, Review } from "../lib/types";
 import { formatAverage } from "../lib/rating";
 import { Artwork } from "./Artwork";
+import { ReviewComposer } from "./ReviewComposer";
 import { ReviewList } from "./ReviewList";
 
 interface PodcastDetailViewProps {
@@ -41,6 +42,8 @@ export function PodcastDetailView({
       </div>
 
       <ExternalLinks links={detail.links} />
+
+      <ReviewComposer podcastId={detail.id} />
 
       <ReviewList
         podcastId={detail.id}

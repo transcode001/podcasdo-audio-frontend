@@ -9,6 +9,15 @@ vi.mock("next/navigation", () => ({
   notFound: () => {
     throw new Error("NEXT_NOT_FOUND");
   },
+  useRouter: () => ({ refresh: vi.fn() }),
+}));
+
+// The detail view embeds the client ReviewComposer, which reads the session.
+// Treat the viewer as anonymous here (public browsing); the composer then shows
+// a login prompt and makes no API calls.
+vi.mock("../../../components/SessionProvider", () => ({
+  useSession: () => ({ status: "anonymous", profile: null, refresh: vi.fn(), setProfile: vi.fn() }),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 vi.mock("../../../lib/api", async (importActual) => {

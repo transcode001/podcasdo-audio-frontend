@@ -40,6 +40,36 @@ export interface ReviewListResponse {
   next_cursor: string | null;
 }
 
+export interface ReviewInput {
+  /** Internal integer 1..10. */
+  rating: number;
+  /** Null clears the body while keeping the rating. */
+  body: string | null;
+}
+
+export interface IconConfig {
+  character: string;
+  background: number;
+  decoration: string;
+  version?: string;
+}
+
+export interface Profile {
+  user_id: string;
+  nickname: string;
+  icon_config: IconConfig;
+  updated_at: string;
+}
+
+export interface ProfileInput {
+  nickname?: string;
+  icon_config?: {
+    character: string;
+    background: number;
+    decoration: string;
+  };
+}
+
 /** Shape of the Backend error envelope: { error: { code, message, request_id } }. */
 export interface ApiErrorBody {
   error: {
