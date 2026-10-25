@@ -164,15 +164,22 @@ export async function listMyReviews(cursor?: string | null): Promise<ReviewListR
  * (which includes rating-only reviews). Pages are scanned up to a small cap.
  */
 export async function findMyReviewForPodcast(podcastId: string): Promise<Review | null> {
+  // Reviews carry no user_id in public responses, and /me/reviews has no
+  // per-podcast filter, so scan the user's own reviews page by page. Terminate
+  // only when the cursor is exhausted (next_cursor == null) so a user with many
+  // reviews cannot miss their existing one (which would otherwise surface as a
+  // 409 on create). A stuck/repeating cursor breaks the loop defensively.
   let cursor: string | null = null;
-  for (let page = 0; page < 20; page++) {
+  const seen = new Set<string>();
+  for (;;) {
     const res: ReviewListResponse = await listMyReviews(cursor);
     const match = res.items.find((r) => r.podcast_id === podcastId);
     if (match) return match;
-    if (!res.next_cursor) return null;
-    cursor = res.next_cursor;
+    const next: string | null = res.next_cursor;
+    if (!next || seen.has(next)) return null;
+    seen.add(next);
+    cursor = next;
   }
-  return null;
 }
 
 // ---- Authenticated writes (cookie + CSRF) ----
