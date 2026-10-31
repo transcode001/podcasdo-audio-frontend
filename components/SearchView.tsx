@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ApiError, searchPodcasts } from "../lib/api";
 import { SEARCH_MAX_LENGTH, SEARCH_MIN_LENGTH } from "../lib/config";

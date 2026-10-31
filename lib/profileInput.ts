@@ -5,7 +5,6 @@ import { countChars } from "./reviewInput";
 export const NICKNAME_MAX = 20;
 
 const NAME_TRIM = /^[ 　\t]+|[ 　\t]+$/g;
-// eslint-disable-next-line no-control-regex
 const CONTROL = /[\u0000-\u001f\u007f-\u009f]/;
 
 export type NicknameValidation = { ok: true; value: string } | { ok: false; message: string };
