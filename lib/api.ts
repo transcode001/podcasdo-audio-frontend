@@ -215,7 +215,20 @@ export async function logout(): Promise<void> {
   await request<void>(`/api/v1/auth/logout`, { method: "POST", credentials: true, csrf: true });
 }
 
+// deleteAccount consumes a prior deletion grant (established by the Google
+// re-authentication) and permanently removes the account. It throws ApiError
+// with code "reauth_required" (status 400) when no valid grant exists.
+export async function deleteAccount(): Promise<void> {
+  await request<void>(`/api/v1/auth/delete`, { method: "POST", credentials: true, csrf: true });
+}
+
 // Full-page navigation URL to begin Google login (not a fetch; avoids CORS).
 export function googleLoginUrl(): string {
   return `${API_BASE_URL}/api/v1/auth/google/start`;
+}
+
+// Full-page navigation URL to re-authenticate specifically for account deletion
+// (backend issues a one-time, 5-minute deletion grant on success).
+export function googleDeleteReauthUrl(): string {
+  return `${API_BASE_URL}/api/v1/auth/google/start?purpose=delete`;
 }
