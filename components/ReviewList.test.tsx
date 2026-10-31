@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { ApiError } from "../lib/api";
 import { listReviews } from "../lib/api";
 import type { Review } from "../lib/types";
 import { ReviewList } from "./ReviewList";

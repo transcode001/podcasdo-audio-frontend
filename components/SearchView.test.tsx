@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { ApiError } from "../lib/api";
 import { searchPodcasts } from "../lib/api";
 import { SearchView } from "./SearchView";
