@@ -95,7 +95,15 @@ export function ReviewComposer({ podcastId }: { podcastId: string }) {
       }
       await reload();
     } catch (err) {
-      setFormError(messageFor(err));
+      // Safety net: a 409 on create means a review already exists (e.g. created
+      // on another device). Switch to edit mode instead of showing a raw
+      // conflict, so the user can update it.
+      if (!existing && err instanceof ApiError && err.status === 409) {
+        await reload();
+        setFormError("すでにこの番組へレビューを投稿済みです。編集に切り替えました。");
+      } else {
+        setFormError(messageFor(err));
+      }
     } finally {
       setSubmitting(false);
     }

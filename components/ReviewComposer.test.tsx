@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import {
+  ApiError,
   createReview,
   deleteReview,
   findMyReviewForPodcast,
@@ -85,6 +86,19 @@ describe("ReviewComposer — create", () => {
     fireEvent.click(screen.getByRole("button", { name: "投稿する" }));
     await waitFor(() => expect(createMock).toHaveBeenCalledWith("p1", { rating: 8, body: "良い番組" }));
     await waitFor(() => expect(router.refresh).toHaveBeenCalled());
+  });
+
+  it("converts a 409 on create into edit mode", async () => {
+    findMock.mockResolvedValueOnce(null); // initial: appears to have no review
+    createMock.mockRejectedValue(new ApiError(409, "conflict", "既に投稿済み"));
+    findMock.mockResolvedValueOnce(existingReview()); // reload locates the existing one
+    render(<ReviewComposer podcastId="p1" />);
+    await screen.findByRole("heading", { name: "レビューを書く" });
+    fireEvent.change(screen.getByLabelText("星評価（必須）"), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("button", { name: "投稿する" }));
+
+    expect(await screen.findByRole("heading", { name: "レビューを編集" })).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("編集に切り替えました");
   });
 
   it("prevents double submission (button disabled while pending)", async () => {
