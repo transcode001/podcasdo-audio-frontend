@@ -1,20 +1,38 @@
-import coreWebVitals from "eslint-config-next/core-web-vitals";
-import typescript from "eslint-config-next/typescript";
+import js from "@eslint/js";
+import react from "@eslint-react/eslint-plugin";
+import next from "@next/eslint-plugin-next";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-// Next 16 removed `next lint`; lint runs via the ESLint CLI. eslint-config-next
-// ships native flat configs, so they are spread directly.
-const eslintConfig = [
-  ...coreWebVitals,
-  ...typescript,
+export default [
+  { ignores: [".next/**", "node_modules/**", "coverage/**"] },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    ignores: [".next/**", "node_modules/**", "coverage/**"],
+    files: ["**/*.{js,mjs,ts,tsx}"],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+    },
+  },
+  {
+    ...react.configs.recommended,
+    files: ["**/*.{ts,tsx}"],
+  },
+  {
+    files: ["**/*.{ts,tsx}"],
+    plugins: { "@next/next": next, "react-hooks": reactHooks },
+    rules: {
+      ...next.configs.recommended.rules,
+      ...next.configs["core-web-vitals"].rules,
+      ...reactHooks.configs.recommended.rules,
+      // Data effects fetch on mount or sync from the URL.
+      "react-hooks/set-state-in-effect": "off",
+      "@eslint-react/set-state-in-effect": "off",
+    },
   },
   {
     rules: {
-      // Our effects are standard "fetch on mount / sync from URL" data effects
-      // that legitimately setState; this new rule flags that valid pattern.
-      "react-hooks/set-state-in-effect": "off",
-      // Allow intentional throwaway bindings named with a leading underscore.
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
@@ -22,5 +40,3 @@ const eslintConfig = [
     },
   },
 ];
-
-export default eslintConfig;

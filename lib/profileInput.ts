@@ -4,7 +4,9 @@ import { countChars } from "./reviewInput";
 // surrounding spaces/tabs, reject empty, over-length, and newline/control chars.
 export const NICKNAME_MAX = 20;
 
-const NAME_TRIM = /^[ 　\t]+|[ 　\t]+$/g;
+const NAME_TRIM = /^[ \u3000\t]+|[ \u3000\t]+$/g;
+// Control characters are intentionally rejected by nickname validation.
+// eslint-disable-next-line no-control-regex
 const CONTROL = /[\u0000-\u001f\u007f-\u009f]/;
 
 export type NicknameValidation = { ok: true; value: string } | { ok: false; message: string };

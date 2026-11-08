@@ -8,7 +8,7 @@ export const BODY_MAX = 2000;
 
 // Leading/trailing whitespace stripped before length checks: half-width and
 // full-width space, tab, newline.
-const TRIM = /^[ 　\t\n]+|[ 　\t\n]+$/g;
+const TRIM = /^[ \u3000\t\n]+|[ \u3000\t\n]+$/g;
 
 /**
  * Normalize a body string: unify newlines to LF, trim surrounding whitespace,
