@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiError, deleteAccount, googleDeleteReauthUrl } from "../lib/api";
+import { ApiError, deleteAccount, devLoginUrl, googleDeleteReauthUrl } from "../lib/api";
+import { DEV_AUTH_ENABLED } from "../lib/config";
 import { toUserMessage } from "../lib/errorMessage";
 import { useSession } from "./SessionProvider";
 
@@ -18,6 +19,7 @@ export function AccountDeletion() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [needReauth, setNeedReauth] = useState(false);
+  const reauthUrl = DEV_AUTH_ENABLED ? devLoginUrl(true) : googleDeleteReauthUrl();
 
   async function confirmDelete() {
     if (submitting) return;
@@ -49,7 +51,7 @@ export function AccountDeletion() {
       </p>
       <ol>
         <li>
-          <a href={googleDeleteReauthUrl()}>① Googleで再認証する</a>
+          <a href={reauthUrl}>{DEV_AUTH_ENABLED ? "① 開発用再認証" : "① Googleで再認証する"}</a>
           （本人確認のため。許可は5分間のみ有効です）
         </li>
         <li>再認証のあと、下の「退会を確定する」を押してください。</li>
@@ -62,7 +64,7 @@ export function AccountDeletion() {
       ) : null}
       {needReauth ? (
         <p>
-          <a href={googleDeleteReauthUrl()}>再認証をやり直す</a>
+          <a href={reauthUrl}>再認証をやり直す</a>
         </p>
       ) : null}
 

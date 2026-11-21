@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { googleLoginUrl, logout } from "../lib/api";
+import { devLoginUrl, googleLoginUrl, logout } from "../lib/api";
+import { DEV_AUTH_ENABLED } from "../lib/config";
 import { useSession } from "./SessionProvider";
 
 // Header auth controls: a Google login link when anonymous, or the nickname,
@@ -17,6 +18,13 @@ export function AuthControls() {
 
   if (status === "anonymous") {
     // Full-page navigation to the Backend start endpoint (redirects to Google).
+    if (DEV_AUTH_ENABLED) {
+      return (
+        <a className="auth-link" href={devLoginUrl()}>
+          開発用ログイン
+        </a>
+      );
+    }
     return (
       <a className="auth-link" href={googleLoginUrl()}>
         Googleでログイン

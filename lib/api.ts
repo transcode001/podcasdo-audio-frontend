@@ -227,6 +227,11 @@ export function googleLoginUrl(): string {
   return `${API_BASE_URL}/api/v1/auth/google/start`;
 }
 
+export function devLoginUrl(grantDelete = false): string {
+  const suffix = grantDelete ? "?grant=delete" : "";
+  return `${API_BASE_URL}/api/v1/auth/dev-login${suffix}`;
+}
+
 // Full-page navigation URL to re-authenticate specifically for account deletion
 // (backend issues a one-time, 5-minute deletion grant on success).
 export function googleDeleteReauthUrl(): string {
