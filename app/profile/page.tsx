@@ -1,6 +1,7 @@
 "use client";
 
 import { googleLoginUrl } from "../../lib/api";
+import { AccountDeletion } from "../../components/AccountDeletion";
 import { MyReviews } from "../../components/MyReviews";
 import { ProfileEditor } from "../../components/ProfileEditor";
 import { useSession } from "../../components/SessionProvider";
@@ -29,6 +30,7 @@ export default function ProfilePage() {
     <>
       <ProfileEditor profile={profile} />
       <MyReviews />
+      <AccountDeletion />
     </>
   );
 }

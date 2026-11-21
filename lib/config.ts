@@ -4,6 +4,11 @@ export const API_BASE_URL = (
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080"
 ).replace(/\/$/, "");
 
+// Local-only development login. This is compile-time public configuration and
+// must never be enabled in a production build.
+export const DEV_AUTH_ENABLED =
+  process.env.NODE_ENV === "development" && process.env.NEXT_PUBLIC_DEV_AUTH === "true";
+
 // Search input bounds (OpenAPI Query parameter: 1..100 after trimming).
 export const SEARCH_MIN_LENGTH = 1;
 export const SEARCH_MAX_LENGTH = 100;
